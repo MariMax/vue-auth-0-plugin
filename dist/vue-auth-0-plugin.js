@@ -47,6 +47,7 @@
       };
       Subject.prototype.subscribe = function (fn) {
           var _this = this;
+          this.subscribers.push(fn);
           return new Subscription(function () { return _this.unsubscribeFn(fn); });
       };
       Subject.prototype.unsubscribeFn = function (fn) {
