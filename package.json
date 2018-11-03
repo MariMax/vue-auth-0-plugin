@@ -1,0 +1,60 @@
+{
+  "name": "vue-auth-0-plugin",
+  "version": "0.0.2",
+  "description": "Authentification service with auth0 for Vue",
+  "main": "dist/vue-auth-0-plugin.js",
+  "module": "dist/vue-auth-0-plugin.esm.js",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "types/*.d.ts"
+  ],
+  "typings": "types/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MariMax/vue-auth-0-plugin.git"
+  },
+  "keywords": [
+    "vue",
+    "auth0",
+    "oauth",
+    "auth-0"
+  ],
+  "author": "Maxim Milovanov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MariMax/vue-auth-0-plugin/issues"
+  },
+  "homepage": "https://github.com/MariMax/vue-auth-0-plugin",
+  "scripts": {
+    "dev": "rollup -c rollup.config.js -w",
+    "build": "rollup -c rollup.config.js",
+    "lint": "tslint src",
+    "test": "",
+    "test:unit": "jest",
+    "dev:test": "jest --watch",
+    "prebuild": "npm run lint",
+    "pretest": "npm run build",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "auth0-js": "^9.2.2"
+  },
+  "devDependencies": {
+    "@types/auth0-js": "^8.11.7",
+    "@types/jest": "^23.1.4",
+    "buble": "^0.19.3",
+    "jest": "^23.1.0",
+    "rollup": "^0.59.4",
+    "rollup-plugin-alias": "^1.4.0",
+    "rollup-plugin-buble": "^0.19.2",
+    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-typescript": "^1.0.0",
+    "rollup-watch": "^4.3.1",
+    "ts-jest": "^23.0.0",
+    "tslib": "^1.9.3",
+    "tslint": "^5.11.0",
+    "typescript": "^3.1.6",
+    "vue": "^2.5.17"
+  }
+}
