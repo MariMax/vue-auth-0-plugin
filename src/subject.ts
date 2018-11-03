@@ -7,14 +7,15 @@ export class Subject<T = any> {
   }
 
   public next(value: T) {
-    this.subscribers.forEach(i => i(value));
+    this.subscribers.forEach((i) => i(value));
   }
 
   public subscribe(fn: (value: T) => void) {
+    this.subscribers.push(fn);
     return new Subscription(() => this.unsubscribeFn(fn));
   }
 
   private unsubscribeFn(fn: (value: T) => void) {
-    this.subscribers = this.subscribers.filter(i => i !== fn);
+    this.subscribers = this.subscribers.filter((i) => i !== fn);
   }
 }
