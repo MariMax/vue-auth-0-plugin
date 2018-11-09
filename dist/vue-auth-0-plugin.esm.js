@@ -56,12 +56,14 @@ var AuthStoageKeys;
     AuthStoageKeys["ACCESS_TOKEN"] = "accessToken";
     AuthStoageKeys["ID_TOKEN"] = "idToken";
     AuthStoageKeys["EXPIRATION_DATE"] = "expirationDate";
+    AuthStoageKeys["AUTH_FULL_INFO"] = "fullInfo";
 })(AuthStoageKeys || (AuthStoageKeys = {}));
 var AuthServiceClass = /** @class */ (function () {
     function AuthServiceClass(authOptions) {
         this.authNotifier = new Subject();
         this.initialized = false;
         this.webStorage = localStorage;
+        this.authSessionInfo = null;
         this.login = this.login.bind(this);
         this.setSession = this.setSession.bind(this);
         this.logout = this.logout.bind(this);
@@ -77,6 +79,12 @@ var AuthServiceClass = /** @class */ (function () {
     AuthServiceClass.prototype.init = function (webStorage) {
         this.webStorage = webStorage;
         this.initialized = true;
+        if (!this.initialized) {
+            var authSessionFromStor = this.webStorage.getItem(AuthStoageKeys.AUTH_FULL_INFO);
+            if (authSessionFromStor !== null) {
+                this.authSessionInfo = JSON.parse(authSessionFromStor);
+            }
+        }
     };
     AuthServiceClass.prototype.login = function () {
         this.isInitializedAssert();
@@ -115,12 +123,21 @@ var AuthServiceClass = /** @class */ (function () {
             }
         });
     };
+    Object.defineProperty(AuthServiceClass.prototype, "userSessionInfo", {
+        get: function () {
+            return this.authSessionInfo;
+        },
+        enumerable: true,
+        configurable: true
+    });
     AuthServiceClass.prototype.isInitializedAssert = function () {
         if (!this.initialized) {
             throw new Error('auth service is not initialized, you must call init first');
         }
     };
     AuthServiceClass.prototype.setSession = function (authResult) {
+        this.authSessionInfo = authResult;
+        this.webStorage.setItem(AuthStoageKeys.AUTH_FULL_INFO, JSON.stringify(this.authSessionInfo));
         if (authResult.expiresIn) {
             var expirationDate = authResult.expiresIn * 1000 + Date.now();
             this.webStorage.setItem(AuthStoageKeys.EXPIRATION_DATE.toString(), expirationDate.toString());

@@ -13,14 +13,15 @@ export enum AuthStoageKeys {
   ACCESS_TOKEN = 'accessToken',
   ID_TOKEN = 'idToken',
   EXPIRATION_DATE = 'expirationDate',
+  AUTH_FULL_INFO = 'fullInfo',
 }
-
 
 export class AuthServiceClass implements IAuthService {
   private authNotifier = new Subject<AuthEvent>();
   private auth0: WebAuth;
   private initialized = false;
   private webStorage: Storage = localStorage;
+  private authSessionInfo: Auth0DecodedHash | null = null;
 
   constructor(authOptions: AuthOptions) {
     this.login = this.login.bind(this);
@@ -39,6 +40,12 @@ export class AuthServiceClass implements IAuthService {
   public init(webStorage: Storage) {
     this.webStorage = webStorage;
     this.initialized = true;
+    if (!this.initialized) {
+      const authSessionFromStor = this.webStorage.getItem(AuthStoageKeys.AUTH_FULL_INFO);
+      if (authSessionFromStor !== null) {
+        this.authSessionInfo = JSON.parse(authSessionFromStor);
+      }
+    }
   }
 
   public login() {
@@ -93,6 +100,10 @@ export class AuthServiceClass implements IAuthService {
     );
   }
 
+  public get userSessionInfo(): Auth0DecodedHash | null {
+    return this.authSessionInfo;
+  }
+
   private isInitializedAssert() {
     if (!this.initialized) {
       throw new Error(
@@ -102,6 +113,8 @@ export class AuthServiceClass implements IAuthService {
   }
 
   private setSession(authResult: Auth0DecodedHash) {
+    this.authSessionInfo = authResult;
+    this.webStorage.setItem(AuthStoageKeys.AUTH_FULL_INFO, JSON.stringify(this.authSessionInfo));
     if (authResult.expiresIn) {
       const expirationDate = authResult.expiresIn * 1000 + Date.now();
       this.webStorage.setItem(
