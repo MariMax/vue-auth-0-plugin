@@ -85,7 +85,7 @@
           this.webStorage = webStorage;
           if (!this.initialized) {
               var authSessionFromStor = this.webStorage.getItem(AuthStoageKeys.AUTH_FULL_INFO);
-              if (authSessionFromStor !== null) {
+              if (authSessionFromStor) {
                   this.authSessionInfo = JSON.parse(authSessionFromStor);
               }
           }
