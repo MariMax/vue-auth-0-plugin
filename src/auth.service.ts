@@ -39,13 +39,13 @@ export class AuthServiceClass implements IAuthService {
 
   public init(webStorage: Storage) {
     this.webStorage = webStorage;
-    this.initialized = true;
     if (!this.initialized) {
       const authSessionFromStor = this.webStorage.getItem(AuthStoageKeys.AUTH_FULL_INFO);
       if (authSessionFromStor !== null) {
         this.authSessionInfo = JSON.parse(authSessionFromStor);
       }
     }
+    this.initialized = true;
   }
 
   public login() {
