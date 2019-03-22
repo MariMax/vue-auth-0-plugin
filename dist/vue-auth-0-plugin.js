@@ -62,6 +62,7 @@
       AuthStoageKeys["ID_TOKEN"] = "idToken";
       AuthStoageKeys["EXPIRATION_DATE"] = "expirationDate";
       AuthStoageKeys["AUTH_FULL_INFO"] = "fullInfo";
+      AuthStoageKeys["STATE"] = "state";
   })(AuthStoageKeys || (AuthStoageKeys = {}));
   var AuthServiceClass = /** @class */ (function () {
       function AuthServiceClass(authOptions) {
@@ -101,7 +102,7 @@
           this.webStorage.removeItem(AuthStoageKeys.ACCESS_TOKEN.toString());
           this.webStorage.removeItem(AuthStoageKeys.ID_TOKEN.toString());
           this.webStorage.removeItem(AuthStoageKeys.EXPIRATION_DATE.toString());
-          this.authNotifier.next(exports.AuthEvent.AUTH_CHANGE);
+          this.authNotifier.next(null);
       };
       AuthServiceClass.prototype.isAuthenticated = function () {
           this.isInitializedAssert();
@@ -124,7 +125,7 @@
               }
               else if (err) {
                   // auth falied
-                  _this.authNotifier.next(exports.AuthEvent.AUTH_CHANGE);
+                  _this.authNotifier.next(null);
               }
           });
       };
@@ -149,7 +150,8 @@
           }
           this.webStorage.setItem(AuthStoageKeys.ACCESS_TOKEN.toString(), authResult.accessToken || '');
           this.webStorage.setItem(AuthStoageKeys.ID_TOKEN.toString(), authResult.idToken || '');
-          this.authNotifier.next(exports.AuthEvent.AUTH_CHANGE);
+          this.webStorage.setItem(AuthStoageKeys.STATE.toString(), authResult.state || '');
+          this.authNotifier.next(authResult);
       };
       return AuthServiceClass;
   }());

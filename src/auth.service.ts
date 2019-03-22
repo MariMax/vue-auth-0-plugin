@@ -1,4 +1,3 @@
-import { AuthEvent } from './auth-events.enum';
 import auth0, {
   Auth0ParseHashError,
   Auth0DecodedHash,
@@ -15,10 +14,11 @@ export enum AuthStoageKeys {
   ID_TOKEN = 'idToken',
   EXPIRATION_DATE = 'expirationDate',
   AUTH_FULL_INFO = 'fullInfo',
+  STATE = 'state',
 }
 
 export class AuthServiceClass implements IAuthService {
-  private authNotifier = new Subject<AuthEvent>();
+  private authNotifier = new Subject<Auth0DecodedHash | null>();
   private auth0: WebAuth;
   private initialized = false;
   private webStorage: Storage = localStorage;
@@ -61,7 +61,7 @@ export class AuthServiceClass implements IAuthService {
     this.webStorage.removeItem(AuthStoageKeys.ID_TOKEN.toString());
     this.webStorage.removeItem(AuthStoageKeys.EXPIRATION_DATE.toString());
 
-    this.authNotifier.next(AuthEvent.AUTH_CHANGE);
+    this.authNotifier.next(null);
   }
 
   public isAuthenticated(): boolean {
@@ -81,7 +81,7 @@ export class AuthServiceClass implements IAuthService {
     );
   }
 
-  public subscribeOnAuthEvents(fn: (event: AuthEvent) => void): Subscription {
+  public subscribeOnAuthEvents(fn: (event?: Auth0DecodedHash | null) => void): Subscription {
     return this.authNotifier.subscribe(fn);
   }
 
@@ -95,7 +95,7 @@ export class AuthServiceClass implements IAuthService {
           this.setSession(authResult);
         } else if (err) {
           // auth falied
-          this.authNotifier.next(AuthEvent.AUTH_CHANGE);
+          this.authNotifier.next(null);
         }
       },
     );
@@ -131,6 +131,10 @@ export class AuthServiceClass implements IAuthService {
       AuthStoageKeys.ID_TOKEN.toString(),
       authResult.idToken || '',
     );
-    this.authNotifier.next(AuthEvent.AUTH_CHANGE);
+    this.webStorage.setItem(
+      AuthStoageKeys.STATE.toString(),
+      authResult.state || '',
+    );
+    this.authNotifier.next(authResult);
   }
 }

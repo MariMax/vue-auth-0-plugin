@@ -1,6 +1,6 @@
 {
   "name": "vue-auth-0-plugin",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Authentification service with auth0 for Vue",
   "main": "dist/vue-auth-0-plugin.js",
   "module": "dist/vue-auth-0-plugin.esm.js",
