@@ -1,9 +1,9 @@
 import { Subscription } from './subscription';
 import { AuthEvent } from './auth-events.enum';
-import { Auth0DecodedHash } from 'auth0-js';
+import { Auth0DecodedHash, AuthorizeOptions } from 'auth0-js';
 
 export abstract class IAuthService {
-  public abstract login: () => void;
+  public abstract login: (options?: AuthorizeOptions) => void;
   public abstract logout: () => void;
   public abstract isAuthenticated: () => boolean;
   public abstract subscribeOnAuthEvents: (fn: (event: AuthEvent) => void) => Subscription;

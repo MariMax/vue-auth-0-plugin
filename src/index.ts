@@ -1,6 +1,6 @@
-import { Subscription } from './subscription';
-import { AuthEvent } from './auth-events.enum';
-import { IAuthService } from './auth-service.interface';
+import {Subscription} from './subscription';
+import {AuthEvent} from './auth-events.enum';
+import {IAuthService} from './auth-service.interface';
 
 import Vue, {PluginFunction} from 'vue';
 import {AuthServiceClass} from './auth.service';
@@ -23,19 +23,18 @@ const defulatOptions = {
   redirectUri: '',
 };
 
-export const AuthService: PluginFunction<
-IAuthServiceOptions
-> = (V: typeof Vue, options: IAuthServiceOptions = defulatOptions) => {
+export const AuthService: PluginFunction<IAuthServiceOptions> = (
+  V: typeof Vue,
+  options: IAuthServiceOptions = defulatOptions,
+) => {
   const {domain, clientID, redirectUri} = options;
   const instance = new AuthServiceClass({
-    domain, clientID, redirectUri,
+    domain,
+    clientID,
+    redirectUri,
   });
 
   V.prototype.$authService = instance;
 };
 
-export {
-  AuthEvent,
-  IAuthService,
-  Subscription,
-};
+export {AuthEvent, IAuthService, Subscription};

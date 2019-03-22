@@ -4,6 +4,7 @@ import auth0, {
   Auth0DecodedHash,
   AuthOptions,
   WebAuth,
+  AuthorizeOptions,
 } from 'auth0-js';
 import { IAuthService } from './auth-service.interface';
 import { Subscription } from './subscription';
@@ -48,9 +49,9 @@ export class AuthServiceClass implements IAuthService {
     this.initialized = true;
   }
 
-  public login() {
+  public login(options?: AuthorizeOptions) {
     this.isInitializedAssert();
-    this.auth0.authorize();
+    this.auth0.authorize(options);
   }
 
   public logout() {

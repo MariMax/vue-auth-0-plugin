@@ -86,9 +86,9 @@ var AuthServiceClass = /** @class */ (function () {
         }
         this.initialized = true;
     };
-    AuthServiceClass.prototype.login = function () {
+    AuthServiceClass.prototype.login = function (options) {
         this.isInitializedAssert();
-        this.auth0.authorize();
+        this.auth0.authorize(options);
     };
     AuthServiceClass.prototype.logout = function () {
         this.isInitializedAssert();
@@ -158,7 +158,9 @@ var AuthService = function (V, options) {
     if (options === void 0) { options = defulatOptions; }
     var domain = options.domain, clientID = options.clientID, redirectUri = options.redirectUri;
     var instance = new AuthServiceClass({
-        domain: domain, clientID: clientID, redirectUri: redirectUri,
+        domain: domain,
+        clientID: clientID,
+        redirectUri: redirectUri,
     });
     V.prototype.$authService = instance;
 };
