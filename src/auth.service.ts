@@ -81,7 +81,7 @@ export class AuthServiceClass implements IAuthService {
     );
   }
 
-  public subscribeOnAuthEvents(fn: (event?: Auth0DecodedHash | null) => void): Subscription {
+  public subscribeOnAuthEvents(fn: (event: Auth0DecodedHash | null) => void): Subscription {
     return this.authNotifier.subscribe(fn);
   }
 
