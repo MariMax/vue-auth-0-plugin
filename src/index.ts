@@ -5,12 +5,6 @@ import {IAuthService} from './auth-service.interface';
 import Vue, {PluginFunction} from 'vue';
 import {AuthServiceClass} from './auth.service';
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    $authService: IAuthService;
-  }
-}
-
 export interface IAuthServiceOptions {
   domain: string;
   clientID: string;
